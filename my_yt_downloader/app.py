@@ -6,7 +6,11 @@ app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_FOLDER = os.path.join(BASE_DIR, 'downloads')
-COOKIE_PATH = os.path.join(BASE_DIR, 'cookies.txt')
+
+COOKIE_PATH = RENDER_COOKIE_PATH = '/etc/secrets/cookies.txt'
+LOCAL_COOKIE_PATH = os.path.join(BASE_DIR, 'cookies.txt')
+
+COOKIE_PATH = RENDER_COOKIE_PATH if os.path.exists(RENDER_COOKIE_PATH) else LOCAL_COOKIE_PATH
 
 if not os.path.exists(DOWNLOAD_FOLDER):
     os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)

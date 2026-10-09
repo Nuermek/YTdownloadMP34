@@ -1,2 +1,4 @@
 ﻿my_yt_downloader/downloads/*
 !my_yt_downloader/downloads/.gitkeep
+cookies.txt
+my_yt_downloader/cookies.txt

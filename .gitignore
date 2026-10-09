@@ -1,0 +1,2 @@
+﻿my_yt_downloader/downloads/*
+!my_yt_downloader/downloads/.gitkeep

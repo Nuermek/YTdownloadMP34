@@ -27,11 +27,11 @@ def download():
         'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(title)s.%(ext)s'),
         'quiet': True,
         'no_warnings': True,
-        # เพิ่มบรรทัดด้านล่างเพื่อแก้ปัญหา Error 403 Forbidden
+        # ตั้งค่า User-Agent และเลือก Client เป็น android เพื่อแก้ปัญหา 403 Forbidden
         'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'extractor_args': {
             'youtube': {
-                'player_client': ['android', 'web']
+                'player_client': ['android']
             }
         }
     }

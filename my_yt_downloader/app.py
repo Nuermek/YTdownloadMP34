@@ -23,15 +23,23 @@ def download():
 
     # 📌 วาง ydl_opts ตรงนี้ (ก่อนเรียกใช้ yt_dlp.YoutubeDL)
     ydl_opts = {
-        'format': 'bestaudio/best' if format_type == 'mp3' else 'best',
+        # ปรับการเลือกฟอร์แมตให้ดึงเสียง/วิดีโอแบบเสถียร
+        'format': 'bestaudio[ext=m4a]/bestaudio/best' if format_type == 'mp3' else 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
         'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(title)s.%(ext)s'),
         'quiet': True,
         'no_warnings': True,
-        # ตั้งค่า User-Agent และเลือก Client เป็น android เพื่อแก้ปัญหา 403 Forbidden
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        
+        # บังคับใช้ IPv4 (ช่วยหลีกเลี่ยงการโดนบล็อก IPv6 บน Cloud Server)
+        'source_address': '0.0.0.0', 
+
+        # ปรับ User-Agent ล่าสุด
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        
+        # ใช้ player_client ล่าสุดที่ไม่ติด PO Token และข้ามข้อจำกัดของ YouTube
         'extractor_args': {
             'youtube': {
-                'player_client': ['android']
+                'player_client': ['mweb', 'tv', 'ios'],
+                'player_skip': ['webpage', 'configs']
             }
         }
     }

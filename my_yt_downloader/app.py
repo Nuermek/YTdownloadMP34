@@ -28,16 +28,17 @@ def download():
         'quiet': True,
         'no_warnings': True,
         
-        # บังคับใช้ IPv4 ช่วยลดอัตราการโดนบล็อก IP บน Cloud
-        'source_address': '0.0.0.0', 
+        # บังคับการส่ง Request ผ่าน IPv4
+        'source_address': '0.0.0.0',
         
-        # ใช้ User-Agent ของอุปกรณ์พกพา
-        'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+        # จำลอง User-Agent ล่าสุด
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
         
-        # สลับมาใช้ client 'ios' หรือ 'mweb' ซึ่งมีโอกาสผ่านระบบตรวจจับสูงกว่า
+        # สลับ Client ลำดับสำรองเพื่อดึงข้อมูล API ได้แน่นอนยิ่งขึ้น
         'extractor_args': {
             'youtube': {
-                'player_client': ['ios', 'mweb']
+                'player_client': ['android', 'ios', 'mweb'],
+                'skip': ['hls', 'dash']
             }
         }
     }

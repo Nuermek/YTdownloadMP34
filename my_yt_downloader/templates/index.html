@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Downloader Web</title>
     <style>
-        /* ตัวแปรสีรองรับ Dark/Light Mode */
         :root[data-theme="dark"] {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
@@ -15,6 +14,11 @@
             --button-bg: #0d6efd;
             --button-hover: #0b5ed7;
             --toggle-bg: #333333;
+            --option-bg: #2a2a2a;
+            --option-border: #444444;
+            --option-active-bg: #0d6efd;
+            --option-active-border: #0d6efd;
+            --option-active-text: #ffffff;
         }
 
         :root[data-theme="light"] {
@@ -26,6 +30,11 @@
             --button-bg: #007bff;
             --button-hover: #0056b3;
             --toggle-bg: #e4e6eb;
+            --option-bg: #f8f9fa;
+            --option-border: #dddddd;
+            --option-active-bg: #007bff;
+            --option-active-border: #007bff;
+            --option-active-text: #ffffff;
         }
 
         body { 
@@ -52,7 +61,7 @@
             transition: background 0.3s, box-shadow 0.3s;
         }
 
-        /* ตำแหน่งปุ่มสวิตช์ย้ายมามุมขวาบนของหน้าจอ */
+        /* ปุ่มสวิตช์มุมขวาบน */
         .theme-switch-wrapper {
             position: absolute;
             top: 20px;
@@ -76,69 +85,86 @@
             width: 48px;
         }
 
-        .theme-switch input {
-            display: none;
-        }
+        .theme-switch input { display: none; }
 
         .slider {
             background-color: var(--toggle-bg);
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            transition: .4s;
-            border-radius: 24px;
+            bottom: 0; cursor: pointer; left: 0;
+            position: absolute; right: 0; top: 0;
+            transition: .4s; border-radius: 24px;
         }
 
         .slider:before {
             background-color: #ffffff;
-            bottom: 3px;
-            content: "";
-            height: 18px;
-            left: 3px;
-            position: absolute;
-            transition: .4s;
-            width: 18px;
+            bottom: 3px; content: ""; height: 18px; left: 3px;
+            position: absolute; transition: .4s; width: 18px;
             border-radius: 50%;
         }
 
-        input:checked + .slider {
-            background-color: #0d6efd;
-        }
+        input:checked + .slider { background-color: #0d6efd; }
+        input:checked + .slider:before { transform: translateX(24px); }
 
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-
-        input[type="text"], select { 
-            width: 90%; 
-            padding: 10px; 
-            margin-bottom: 15px; 
+        input[type="text"] { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 20px; 
             border: 1px solid var(--input-border); 
-            border-radius: 6px; 
+            border-radius: 8px; 
             background-color: var(--input-bg);
             color: var(--text-color);
             box-sizing: border-box;
+            font-size: 14px;
+            outline: none;
         }
 
-        select, button { 
-            padding: 10px; 
-            border-radius: 6px; 
-            margin: 5px; 
-            cursor: pointer; 
+        /* UI ปุ่มเลือก MP3 / MP4 */
+        .format-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
-        button { 
+        .format-option {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--option-border);
+            border-radius: 8px;
+            background-color: var(--option-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+        }
+
+        .format-option:hover {
+            border-color: var(--button-bg);
+        }
+
+        .format-option.active {
+            background-color: var(--option-active-bg);
+            border-color: var(--option-active-border);
+            color: var(--option-active-text);
+        }
+
+        .download-btn { 
+            width: 100%;
             background-color: var(--button-bg); 
             color: white; 
             border: none; 
-            padding: 10px 20px; 
+            padding: 12px; 
+            border-radius: 8px;
             font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
 
-        button:hover { 
+        .download-btn:hover { 
             background-color: var(--button-hover); 
         }
 
@@ -150,7 +176,6 @@
 </head>
 <body>
 
-<!-- ปุ่มเปลี่ยนธีม ย้ายมามุมขวาบนของหน้าจอ -->
 <div class="theme-switch-wrapper">
     <span class="theme-label" id="theme-text">DARK</span>
     <label class="theme-switch" for="checkbox">
@@ -162,17 +187,32 @@
 <div class="card">
     <h2>YouTube Downloader</h2>
     <input type="text" id="url" placeholder="วางลิงก์ YouTube ที่นี่...">
-    <br>
-    <select id="format">
-        <option value="mp3">MP3 (ไฟล์เสียง)</option>
-        <option value="mp4">MP4 (วิดีโอ)</option>
-    </select>
-    <button onclick="startDownload()">ดาวน์โหลด</button>
+    
+    <!-- UI ปุ่มกดเลือก MP3 / MP4 -->
+    <div class="format-selector">
+        <div class="format-option active" onclick="selectFormat('mp3', this)">
+            🎵 MP3 (เสียง)
+        </div>
+        <div class="format-option" onclick="selectFormat('mp4', this)">
+            🎬 MP4 (วิดีโอ)
+        </div>
+    </div>
+
+    <button class="download-btn" onclick="startDownload()">ดาวน์โหลด</button>
     <div id="status"></div>
 </div>
 
 <script>
-// จัดการสวิตช์เปลี่ยนธีมและข้อความกำกับ
+// ตัวแปรเก็บฟอร์แมตที่เลือก (ค่าเริ่มต้น mp3)
+let selectedFormat = 'mp3';
+
+function selectFormat(format, element) {
+    selectedFormat = format;
+    document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('active'));
+    element.classList.add('active');
+}
+
+// จัดการสวิตช์เปลี่ยนธีม
 const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
 const themeText = document.getElementById('theme-text');
 const currentTheme = localStorage.getItem('theme') || 'dark';
@@ -203,7 +243,7 @@ toggleSwitch.addEventListener('change', switchTheme, false);
 // ฟังก์ชันดาวน์โหลด
 async function startDownload() {
     const url = document.getElementById('url').value;
-    const format = document.getElementById('format').value;
+    const format = selectedFormat;
     const status = document.getElementById('status');
 
     if (!url) {

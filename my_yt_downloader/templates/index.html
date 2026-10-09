@@ -37,6 +37,7 @@
             background-color: var(--bg-color); 
             color: var(--text-color);
             margin: 0; 
+            position: relative;
             transition: background-color 0.3s, color 0.3s;
         }
 
@@ -48,17 +49,24 @@
             width: 100%; 
             max-width: 450px; 
             text-align: center; 
-            position: relative;
             transition: background 0.3s, box-shadow 0.3s;
         }
 
-        /* ปุ่มสวิตช์ธีมมุมขวาบน */
+        /* ตำแหน่งปุ่มสวิตช์ย้ายมามุมขวาบนของหน้าจอ */
         .theme-switch-wrapper {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             display: flex;
             align-items: center;
+            gap: 10px;
+        }
+
+        .theme-label {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            user-select: none;
         }
 
         .theme-switch {
@@ -142,14 +150,16 @@
 </head>
 <body>
 
-<div class="card">
-    <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider"></div>
-        </label>
-    </div>
+<!-- ปุ่มเปลี่ยนธีม ย้ายมามุมขวาบนของหน้าจอ -->
+<div class="theme-switch-wrapper">
+    <span class="theme-label" id="theme-text">DARK</span>
+    <label class="theme-switch" for="checkbox">
+        <input type="checkbox" id="checkbox" />
+        <div class="slider"></div>
+    </label>
+</div>
 
+<div class="card">
     <h2>YouTube Downloader</h2>
     <input type="text" id="url" placeholder="วางลิงก์ YouTube ที่นี่...">
     <br>
@@ -162,23 +172,29 @@
 </div>
 
 <script>
-// จัดการสวิตช์เปลี่ยนธีม (ค่าเริ่มต้นเป็น dark)
+// จัดการสวิตช์เปลี่ยนธีมและข้อความกำกับ
 const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+const themeText = document.getElementById('theme-text');
 const currentTheme = localStorage.getItem('theme') || 'dark';
 
 document.documentElement.setAttribute('data-theme', currentTheme);
 
 if (currentTheme === 'light') {
     toggleSwitch.checked = true;
+    themeText.innerText = 'LIGHT';
+} else {
+    themeText.innerText = 'DARK';
 }
 
 function switchTheme(e) {
     if (e.target.checked) {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
+        themeText.innerText = 'LIGHT';
     } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
+        themeText.innerText = 'DARK';
     }    
 }
 

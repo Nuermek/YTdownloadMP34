@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_FOLDER = os.path.join(BASE_DIR, 'downloads')
+COOKIE_PATH = os.path.join(BASE_DIR, 'cookies.txt')
 
 if not os.path.exists(DOWNLOAD_FOLDER):
     os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
@@ -27,21 +28,34 @@ def download():
         if not os.path.exists(DOWNLOAD_FOLDER):
             os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
+        if format_type == 'mp3':
+            format_spec = 'ba/ba*/bestaudio/best'
+        else:
+            format_spec = 'bv*+ba/b/best'
+
         ydl_opts = {
-            'format': 'bestaudio/best' if format_type == 'mp3' else 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+            'format': format_spec,
             'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(title)s.%(ext)s'),
             'restrictfilenames': True,
             'quiet': True,
             'no_warnings': True,
             'source_address': '0.0.0.0',
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+            # 📌 สลับใช้ Player Client ของ iOS / Android เพื่อ bypass HTTP 403 Forbidden
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['ios', 'android', 'mweb']
+                }
+            }
         }
+
+        if os.path.exists(COOKIE_PATH):
+            ydl_opts['cookiefile'] = COOKIE_PATH
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
             filename = ydl.prepare_filename(info)
 
-        # 📌 สั่งให้ลบไฟล์อัตโนมหลังจากส่งไฟล์ให้ผู้ใช้ดาวน์โหลดเรียบร้อยแล้ว
         @after_this_request
         def remove_file(response):
             try:

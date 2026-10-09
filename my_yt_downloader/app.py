@@ -23,23 +23,21 @@ def download():
 
     # 📌 วาง ydl_opts ตรงนี้ (ก่อนเรียกใช้ yt_dlp.YoutubeDL)
     ydl_opts = {
-        # ปรับการเลือกฟอร์แมตให้ดึงเสียง/วิดีโอแบบเสถียร
-        'format': 'bestaudio[ext=m4a]/bestaudio/best' if format_type == 'mp3' else 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+        'format': 'bestaudio/best' if format_type == 'mp3' else 'best',
         'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(title)s.%(ext)s'),
         'quiet': True,
         'no_warnings': True,
         
-        # บังคับใช้ IPv4 (ช่วยหลีกเลี่ยงการโดนบล็อก IPv6 บน Cloud Server)
+        # บังคับใช้ IPv4 ช่วยลดอัตราการโดนบล็อก IP บน Cloud
         'source_address': '0.0.0.0', 
-
-        # ปรับ User-Agent ล่าสุด
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
         
-        # ใช้ player_client ล่าสุดที่ไม่ติด PO Token และข้ามข้อจำกัดของ YouTube
+        # ใช้ User-Agent ของอุปกรณ์พกพา
+        'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+        
+        # สลับมาใช้ client 'ios' หรือ 'mweb' ซึ่งมีโอกาสผ่านระบบตรวจจับสูงกว่า
         'extractor_args': {
             'youtube': {
-                'player_client': ['mweb', 'tv', 'ios'],
-                'player_skip': ['webpage', 'configs']
+                'player_client': ['ios', 'mweb']
             }
         }
     }

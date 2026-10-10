@@ -65,9 +65,10 @@ def download():
             'no_warnings': True,
             'source_address': '0.0.0.0',
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+            # 📌 ปรับปรุง extractor_args ให้ใช้เฉพาะ client ที่มีความเสถียรสูง
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['ios', 'android', 'mweb']
+                    'player_client': ['android', 'web']
                 }
             }
         }

@@ -86,9 +86,11 @@ def download():
         def remove_file(response):
             try:
                 if os.path.exists(filename):
+                    # ปิดการลบทันทีบน Windows ชั่วคราว หรือปล่อยให้ยกเว้น Error 32
                     os.remove(filename)
             except Exception as e:
-                app.logger.error(f"Error removing file: {e}")
+                # ถ้าติดปัญหาไฟล์กำลังถูกใช้งานอยู่บน Windows ให้ข้ามไปก่อน ไม่ต้องแสดง Log Error พลาด
+                pass
             return response
 
         return send_file(

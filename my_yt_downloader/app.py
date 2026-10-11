@@ -23,8 +23,10 @@ def get_usable_cookie_path():
     source_cookie = None
     if os.path.exists(RENDER_COOKIE_PATH):
         source_cookie = RENDER_COOKIE_PATH
+        COOKIE_FILE_PATH = RENDER_COOKIE_PATH
     elif os.path.exists(LOCAL_COOKIE_PATH):
         source_cookie = LOCAL_COOKIE_PATH
+        COOKIE_FILE_PATH = LOCAL_COOKIE_PATH
 
     if source_cookie:
         try:

@@ -23,10 +23,8 @@ def get_usable_cookie_path():
     source_cookie = None
     if os.path.exists(RENDER_COOKIE_PATH):
         source_cookie = RENDER_COOKIE_PATH
-        COOKIE_FILE_PATH = RENDER_COOKIE_PATH
     elif os.path.exists(LOCAL_COOKIE_PATH):
         source_cookie = LOCAL_COOKIE_PATH
-        COOKIE_FILE_PATH = LOCAL_COOKIE_PATH
 
     if source_cookie:
         try:
@@ -66,7 +64,6 @@ def download():
             'quiet': True,
             'no_warnings': True,
             'source_address': '0.0.0.0',
-            'cookiefile': COOKIE_FILE_PATH, # ชี้ไปที่ไฟล์คุกกี้ชั่วคราว
             'extractor_args': {
                 'youtube': {
                     'player_client': ['web', 'default']
@@ -102,6 +99,7 @@ def download():
 
     except Exception as e:
         return jsonify({'error': f'ไม่สามารถดาวน์โหลดได้: {str(e)}'}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

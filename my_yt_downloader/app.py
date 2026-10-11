@@ -64,7 +64,6 @@ def download():
             'quiet': True,
             'no_warnings': True,
             'source_address': '0.0.0.0',
-            'proxy': 'http://username:password@proxy_ip:port',
             'extractor_args': {
                 'youtube': {
                     'player_client': ['android', 'web']

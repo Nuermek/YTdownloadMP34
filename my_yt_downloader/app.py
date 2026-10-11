@@ -66,7 +66,7 @@ def download():
             'source_address': '0.0.0.0',
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['web', 'default']
+                    'player_client': ['android', 'web']
                 }
             }
         }

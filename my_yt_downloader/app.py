@@ -64,10 +64,10 @@ def download():
             'quiet': True,
             'no_warnings': True,
             'source_address': '0.0.0.0',
-            'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+            'cookiefile': COOKIE_FILE_PATH, # ชี้ไปที่ไฟล์คุกกี้ชั่วคราว
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['mweb', 'android']
+                    'player_client': ['web', 'default']
                 }
             }
         }

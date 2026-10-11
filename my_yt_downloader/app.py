@@ -68,7 +68,7 @@ def download():
             # 📌 ปรับปรุง extractor_args ให้ใช้เฉพาะ client ที่มีความเสถียรสูง
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'web']
+                    'player_client': ['web', 'mweb']
                 }
             }
         }
